@@ -52,7 +52,7 @@
           </el-header>
         </div>
         <!-- Chat Page -->
-        <el-main class="chat-container">
+        <el-main class="chat-container" v-loading.lock="fullscreenLoading">
           <el-scrollbar class="chat-messages" ref="chatScrollbar">
             <div
               v-for="(message, index) in messages"
@@ -95,6 +95,7 @@ const activeMenu = ref("/");
 const messages = ref<{ text: string; sender: string }[]>([]);
 const userMessage = ref("");
 const chatScrollbar = ref();
+const fullscreenLoading = ref(false);
 
 const goTo = (path: string) => {
   console.log("Navigating to:", path);
@@ -109,10 +110,12 @@ const sendMessage = () => {
 
   messages.value.push({ text: userMessage.value, sender: "user" });
   userMessage.value = "";
+  fullscreenLoading.value = true;
 
   // Simulate bot response
   setTimeout(() => {
     messages.value.push({ text: "Hello! How can I help you?", sender: "bot" });
+    fullscreenLoading.value = false;
     //scroll to bottom when chat
     nextTick(() => {
       const scrollWrap = chatScrollbar.value?.$el?.querySelector(
