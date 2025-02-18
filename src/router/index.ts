@@ -1,21 +1,20 @@
-import { createRouter, createWebHistory,createWebHashHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
       path: "/",
+      name: "Chat",
       component: () => import("@/layout/Layout.vue"),
-      children: [
-        {
-          path: "",
-          name: "CHAT",
-          component: () => import("@/views/Chat.vue"),
-        },
-      ],
     },
-    
+    {
+      path: '/login',
+      name: 'Login',
+      component: () => import("@/views/Login.vue"),
+    },
   ],
 });
+
 
 export default router;

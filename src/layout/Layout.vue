@@ -164,6 +164,8 @@ import {
   Setting,
 } from "@element-plus/icons-vue";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { useRouter } from "vue-router";
+
 
 const isCollapse = ref(false);
 const activeMenu = ref("/");
@@ -173,6 +175,8 @@ const chatScrollbar = ref();
 const fullscreenLoading = ref(false);
 const searchDialogVisible = ref(false);
 const searchQuery = ref("");
+  
+  const router = useRouter();
 
 //not use
 const goTo = (path: string) => {
@@ -225,6 +229,7 @@ const handleLogout = () => {
         message: "Logout successful!",
       });
       // ใส่โค้ดสำหรับ logout ที่นี่ เช่น ล้าง token, redirect ไปหน้า login
+      router.push("/login");
     })
     .catch(() => {
       ElMessage({
