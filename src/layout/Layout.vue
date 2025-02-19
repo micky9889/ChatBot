@@ -70,7 +70,11 @@
           </el-header>
         </div>
         <!-- Chat Page -->
-        <el-main class="chat-container" v-loading.lock="fullscreenLoading"  element-loading-text="Loading...">
+        <el-main
+          class="chat-container"
+          v-loading.lock="fullscreenLoading"
+          element-loading-text="Loading..."
+        >
           <el-scrollbar class="chat-messages" ref="chatScrollbar">
             <div
               v-for="(message, index) in messages"
@@ -83,6 +87,7 @@
           </el-scrollbar>
           <div class="chat-input">
             <el-input
+              ref="inputRef"
               type="textarea"
               v-model="userMessage"
               placeholder="Type a message to Chat-BOT..."
@@ -132,6 +137,7 @@
       @close="closeSearchDialog"
     >
       <el-input
+        ref="searchInput"
         v-model="searchQuery"
         placeholder="Enter text to search..."
         clearable
@@ -153,7 +159,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, computed } from "vue";
+import { ref, nextTick, computed, onMounted } from "vue";
 import {
   Expand,
   Fold,
@@ -166,28 +172,37 @@ import {
 import { ElMessage, ElMessageBox } from "element-plus";
 import { useRouter } from "vue-router";
 
-
-const isCollapse = ref(false);
-const activeMenu = ref("/");
+const isCollapse = ref<boolean>(false);
+const activeMenu = ref<string>("/");
 const messages = ref<{ text: string; sender: string }[]>([]);
-const userMessage = ref("");
-const chatScrollbar = ref();
-const fullscreenLoading = ref(false);
-const searchDialogVisible = ref(false);
-const searchQuery = ref("");
-  
-  const router = useRouter();
+const userMessage = ref<string>("");
+const chatScrollbar = ref<any>(null);
+const fullscreenLoading = ref<boolean>(false);
+const searchDialogVisible = ref<boolean>(false);
+const searchQuery = ref<string>("");
+const profileDialogVisible = ref<boolean>(false);
+const inputRef = ref<any>(null);
+const searchInput = ref<any>(null);
+const router = useRouter();
+
+onMounted(() => {
+  nextTick(() => {
+    inputRef.value?.focus(); // Set focus on the input element
+  });
+});
 
 //not use
-const goTo = (path: string) => {
+const goTo = (path: string): void => {
   console.log("Navigating to:", path);
 };
+
 //expand sidebar
-const toggleCollapse = () => {
+const toggleCollapse = (): void => {
   isCollapse.value = !isCollapse.value;
 };
+
 //send message
-const sendMessage = () => {
+const sendMessage = (): void => {
   if (userMessage.value.trim() === "") return;
 
   messages.value.push({ text: userMessage.value, sender: "user" });
@@ -198,6 +213,12 @@ const sendMessage = () => {
   setTimeout(() => {
     messages.value.push({ text: "Hello! How can I help you?", sender: "bot" });
     fullscreenLoading.value = false;
+
+    // Set focus back to the input field
+    nextTick(() => {
+      inputRef.value?.focus(); // Set focus on the input element
+    });
+
     //scroll to bottom when chat
     nextTick(() => {
       const scrollWrap = chatScrollbar.value?.$el?.querySelector(
@@ -213,7 +234,7 @@ const sendMessage = () => {
   }, 1000);
 };
 //logout
-const handleLogout = () => {
+const handleLogout = (): void => {
   ElMessageBox.confirm(
     "Are you sure you want to logout?",
     "Logout Confirmation",
@@ -228,7 +249,7 @@ const handleLogout = () => {
         type: "success",
         message: "Logout successful!",
       });
-      // ใส่โค้ดสำหรับ logout ที่นี่ เช่น ล้าง token, redirect ไปหน้า login
+      // reset token
       router.push("/login");
     })
     .catch(() => {
@@ -239,24 +260,29 @@ const handleLogout = () => {
     });
 };
 //dialog profile
-const profileDialogVisible = ref(false);
-
-const openProfileDialog = () => {
+const openProfileDialog = (): void => {
   profileDialogVisible.value = true;
 };
 // dialog search
-const openSearchDialog = () => {
+const openSearchDialog = (): void => {
   searchDialogVisible.value = true;
+
+  //focus input search
+  nextTick(() => {
+    setTimeout(() => {
+      searchInput.value?.focus();
+    }, 100); 
+  });
 };
 
-// กรองข้อความแชทที่ตรงกับคำค้นหา
+// filter message
 const filteredMessages = computed(() => {
   if (!searchQuery.value) return [];
   return messages.value.filter((msg) =>
     msg.text.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
 });
-const closeSearchDialog = () => {
+const closeSearchDialog = (): void => {
   searchDialogVisible.value = false;
   searchQuery.value = "";
 };

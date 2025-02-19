@@ -7,6 +7,7 @@
       <el-form :model="form" :rules="rules" ref="formRef" label-width="100px">
         <el-form-item label="Username" prop="username">
           <el-input
+             ref="usernameInput"
             v-model="form.username"
             placeholder="Enter your username"
             @keyup.enter="handleLogin"
@@ -36,20 +37,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { ElMessage } from "element-plus";
+import { onMounted, ref } from "vue";
+import { ElMessage, type FormRules } from "element-plus";
 import { useRouter } from "vue-router";
 import type { FullScreen } from "@element-plus/icons-vue";
+import type { FormLogin } from "@/types/formLogin";
 
 const router = useRouter();
-const form = ref({
+
+const form = ref<FormLogin>({
   username: "",
   password: "",
 });
 
-const loading = ref(false);
+const loading = ref<boolean>(false);
+  const usernameInput = ref<any>(null); 
 
-const rules = {
+const rules:FormRules = {
   username: [
     { required: true, message: "Username is required", trigger: "blur" },
   ],
@@ -57,6 +61,10 @@ const rules = {
     { required: true, message: "Password is required", trigger: "blur" },
   ],
 };
+onMounted(() => {
+  usernameInput.value?.focus(); // focus ที่ input เมื่อ component โหลด
+});
+
 
 const handleLogin = async () => {
   loading.value = true;
