@@ -42,14 +42,14 @@
                 placement="bottom"
               >
                 <el-button
-                  type="primary"
+                  type="default"
                   :icon="Expand"
                   round
                   @click="toggleCollapse"
                   class="button-expand"
                 />
               </el-tooltip>
-              <span> Chat-BOT </span>
+              <span style="margin-left: 10px;font-weight: bold;font-size: large;"> Chat-BOT </span>
             </div>
             <el-dropdown trigger="click">
               <el-button type="info" :icon="Setting" circle />
@@ -306,8 +306,8 @@ const closeSearchDialog = (): void => {
   padding: 15px;
 }
 .el-header.header-main {
-  background-color: #409eff;
-  color: white;
+  background-color: white;
+  color: #444444;
   display: flex;
   justify-content: space-between;
   padding: 15px;
