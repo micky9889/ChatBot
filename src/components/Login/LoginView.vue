@@ -1,6 +1,6 @@
 <template>
   <div class="login-container" v-loading.FullScreen.lock="loading">
-    <h2 class="chatbot-title">Chat-BOT</h2>
+    <h2 class="chatbot-title">Chat-BOX</h2>
 
     <div class="login-content">
       <h2 class="welcome-text">Welcome</h2>
@@ -22,7 +22,7 @@
           />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="login-btn" @click="handleLogin">
+          <el-button class="login-btn" @click="handleLogin">
             Login
           </el-button>
         </el-form-item>
@@ -73,17 +73,16 @@ const handleLogin = async () => {
 </script>
 
 <style scoped>
-/* พื้นหลังแบบ Gradient */
+/* พื้นหลังเดิม + เพิ่มรูปภาพ */
 .login-container {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #2c2c2c, #1a1a1a); /* ปรับพื้นหลังให้เข้มขึ้น */
+  background: linear-gradient(135deg, #2c2c2c, #020202); /* สีพื้นหลังเดิม */
+  position: relative;
   animation: fadeIn 1.2s ease-in-out;
 }
-
-/* Animation เมื่อเปิดหน้า */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -95,7 +94,45 @@ const handleLogin = async () => {
   }
 }
 
-/* ข้อความ Chat-BOT */
+/* เพิ่มภาพพื้นหลังที่เล็กลง */
+.login-container::before {
+  content: "";
+  position: absolute;
+  width: 100px; /* ปรับขนาดภาพ */
+  height: 100px;
+  background: url('/icons/chat.png') no-repeat center;
+  background-size: contain; /* ทำให้ภาพเล็กลงและอยู่ในขอบเขต */
+  opacity: 1; /* ทำให้ภาพโปร่งแสงเล็กน้อย */
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: imageFloat .5s infinite alternate ease-in;
+}
+
+/* Animation ให้ภาพขยับเบาๆ */
+@keyframes imageFloat {
+  from {
+    transform: translateX(-50%) translateY(150px);
+  }
+  to {
+    transform: translateX(-50%) translateY(165px);
+  }
+}
+
+/* เพิ่มภาพพื้นหลังอีกภาพที่มุมขวาบน */
+.login-container::after {
+  content: "";
+  position: absolute;
+  width: 400px; /* ปรับขนาดภาพ */
+  height: 40px;
+  background: url('/icons/lvb1.png') no-repeat center;
+  background-size: contain;
+  opacity: 1; /* ปรับความโปร่งแสง */
+  top: 3%;
+  right: 2%;
+}
+
+/* ข้อความ Chat-BOX */
 .chatbot-title {
   position: absolute;
   top: 20px;
@@ -150,7 +187,7 @@ const handleLogin = async () => {
 /* Hover Effect */
 .login-btn:hover {
   transform: scale(1.05);
-  background-color: #7e7e7e; /* เปลี่ยนสีเมื่อวางเมาส์เหนือปุ่ม */
+  background-color: #244cfc; /* เปลี่ยนสีเมื่อวางเมาส์เหนือปุ่ม */
 }
 
 /* Input Style */

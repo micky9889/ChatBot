@@ -27,7 +27,7 @@
         </el-header>
         <el-menu :default-active="activeMenu" class="el-menu-vertical">
           <el-menu-item index="/" @click="goTo('/')">
-            <span>chat with Chat-BOT</span>
+            <span>chat with Chat-BOX</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
@@ -49,7 +49,7 @@
                   class="button-expand"
                 />
               </el-tooltip>
-              <span style="margin-left: 10px;font-weight: bold;font-size: large;"> Chat-BOT </span>
+              <span style="margin-left: 10px;font-weight: bold;font-size: large;"> Chat-BOX </span>
             </div>
             <el-dropdown trigger="click">
               <el-button type="info" :icon="Setting" circle />
@@ -90,7 +90,7 @@
               ref="inputRef"
               type="textarea"
               v-model="userMessage"
-              placeholder="Type a message to Chat-BOT..."
+              placeholder="Type a message to Chat-BOX..."
               @keyup.enter="sendMessage"
               clearable
               :disabled="fullscreenLoading"
